@@ -1,42 +1,63 @@
 #root {
-  max-width: 1280px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+ul {
+  padding: 0 .5rem;
+  background-color: #40404c;
+  border-radius: 1rem;
+  border: 1px solid #707a7c;
+}
+ul>li {
+  list-style-type: none;
+  padding: .5rem .5rem;
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+}
+ul>li:not(:last-child) {
+  border-bottom: 1px solid #707a7c;
+}
+ul>li>label {
+  padding: 0.2rem .5rem;
+  margin: 0 .5rem 0 0;
+  border-radius: 2rem;
+}
+ul>li>button {
+  padding: 0.2rem .5rem;
+  margin: 0  0 0 .5rem;
+  background-color: #3c3b3d;
+  border-radius: 2rem;
+  color: #d0d0d0;
+}
+li.todo>label {
+  background-color: #67073a;
+}
+li.done {
+  color: #aaa;
+}
+li.done>label {
+  background-color: #07671f;
+}
+
+/* estilos para o useContext de cambiar de modo oscuro a claro */
+
+/* Estilos para el tema claro */
+.light {
+  background-color: white;
+  color: black;
+}
+
+/* Estilos para el tema oscuro */
+.dark {
+  background-color: #40404c;
+  color: white;
+}
+
+
+/* estilos para a App en general*/
+.App {
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

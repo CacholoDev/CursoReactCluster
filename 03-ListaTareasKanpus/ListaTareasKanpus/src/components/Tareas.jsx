@@ -1,17 +1,28 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-export const Tareas = ({text,isChecked}) => {
+export const Tareas = ({ titulo, isChecked, tareas, setTareas }) => {
+    const eliminarTarea = (titulo) => { 
+        const tareasFiltradas = tareas.filter(tarea => tarea.titulo !== titulo);
+        setTareas(tareasFiltradas);
+    }
+
     return (
-    <li>
-  <input type="checkbox" defaultChecked={isChecked} />
-  {text} 
-  <button>Eliminar</button>
-</li>
-);
+    <li className={isChecked ? "done" : "todo"}> 
+      <label>
+        <input type="checkbox" defaultChecked={isChecked} />
+        {isChecked ? "DONE" : "TODO"}
+      </label>
+        {titulo}
+        {isChecked && <button onClick={() => eliminarTarea(titulo)}>Eliminar</button>}
+        {isChecked || <button>Editar</button>}
+      
+    </li>
+  );
 };
 
-
-Tareas.propTypes= {
-    text: PropTypes.string.isRequired,
-    isChecked:PropTypes.bool.isRequired
-}
+Tareas.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  isChecked: PropTypes.bool.isRequired,
+  tareas: PropTypes.array.isRequired,
+  setTareas: PropTypes.func.isRequired,
+};
