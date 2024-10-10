@@ -1,21 +1,38 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 export const Tareas = ({ titulo, isChecked, tareas, setTareas }) => {
-    const eliminarTarea = (titulo) => { 
-        const tareasFiltradas = tareas.filter(tarea => tarea.titulo !== titulo);
-        setTareas(tareasFiltradas);
-    }
+  // Estado local para manejar el estado del checkbox
+  const [checked, setChecked] = useState(isChecked);
 
-    return (
-    <li className={isChecked ? "done" : "todo"}> 
+  // Función para eliminar una tarea
+  const eliminarTarea = (titulo) => {
+    const tareasFiltradas = tareas.filter((tarea) => tarea.titulo !== titulo);
+    setTareas(tareasFiltradas);
+  };
+
+  // Función para manejar el cambio del checkbox
+  const handleCheckboxChange = () => {
+    setChecked(!checked);
+    const tareasActualizadas = tareas.map((tarea) =>
+      tarea.titulo === titulo ? { ...tarea, isChecked: !checked } : tarea
+    );
+    setTareas(tareasActualizadas);
+  };
+
+  return (
+    <li className={checked ? "done" : "todo"}>
       <label>
-        <input type="checkbox" defaultChecked={isChecked} />
-        {isChecked ? "DONE" : "TODO"}
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={handleCheckboxChange}
+        />
+        {checked ? "DONE" : "TODO"}
       </label>
-        {titulo}
-        {isChecked && <button onClick={() => eliminarTarea(titulo)}>Eliminar</button>}
-        {isChecked || <button>Editar</button>}
-      
+      {titulo}
+      {checked && <button onClick={() => eliminarTarea(titulo)}>Eliminar</button>}
+      {!checked && <button>Editar</button>}
     </li>
   );
 };

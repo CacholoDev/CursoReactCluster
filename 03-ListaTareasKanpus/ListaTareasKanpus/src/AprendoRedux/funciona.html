@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de usuario con Redux</title>
+    <!-- Cargar React, ReactDOM y Redux desde CDN -->
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/redux@4.0.5/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/react-redux@7.2.2/dist/react-redux.min.js"></script>
+    <style type="text/css">
+      #root {
+        min-width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .panel {
+        width: min(100vw, 30rem);
+        min-height: min(100vh, 20rem);
+        background-color: #e0f1f0;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 1rem;
+        text-align: center;
+      }
+      input,
+      button {
+        padding: 0.5rem;
+        border-style: solid;
+        border-radius: 1rem;
+        margin: 0 0.2rem 1rem 0.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="root"></main>
+
+    <script>
+      // Importamos React y ReactRedux globalmente
+      const { useState } = React;
+      const { Provider, useDispatch, useSelector } = ReactRedux;
+
+      const initialState = {
+        usuarioActual: null,
+        usuarios: {},
+      };
+
+      function sesionReducer(state = initialState, action) {
+        switch (action.type) {
+          case "panel/sesionIniciada":
+            const nombre = action.payload.usuario;
+            const nuevasVeces = state.usuarios[nombre]?.veces
+              ? state.usuarios[nombre].veces + 1
+              : 1;
+            return {
+              ...state,
+              usuarioActual: nombre,
+              usuarios: {
+                ...state.usuarios,
+                [nombre]: {
+                  ...state.usuarios[nombre],
+                  veces: nuevasVeces,
+                },
+              },
+            };
+          case "panel/sesionCerrada":
+            return { ...state, usuarioActual: null };
+          default:
+            return state;
+        }
+      }
+
+      function datosReducer(state = initialState, action) {
+        if (action.type === "datos/bioCambiada") {
+          const { payload: { bio, usuario } } = action;
+          return {
+            ...state,
+            usuarios: {
+              ...state.usuarios,
+              [usuario]: {
+                ...state.usuarios[usuario],
+                bio,
+              },
+            },
+          };
+        }
+        return state;
+      }
+
+      const rootReducer = (state = initialState, action) =>
+        datosReducer(sesionReducer(state, action), action);
+
+      const store = Redux.createStore(rootReducer);
+
+      const FormLogin = ({ onInicioSesion }) => {
+        const [usuarioIniciar, setUsuarioIniciar] = useState("");
+        return React.createElement(
+          "form",
+          null,
+          React.createElement("input", {
+            type: "text",
+            value: usuarioIniciar,
+            onChange: (e) => setUsuarioIniciar(e.target.value),
+            placeholder: "alice",
+          }),
+          React.createElement("br", null),
+          usuarioIniciar.length > 0 &&
+            React.createElement(
+              "button",
+              { type: "button", onClick: () => onInicioSesion(usuarioIniciar) },
+              `Iniciar sesión como ${usuarioIniciar}`
+            )
+        );
+      };
+
+      const DatosUsuario = ({ nombre, onCierreSesion }) => {
+        const veces = useSelector((state) => state.usuarios[nombre]?.veces);
+        const initialBio = useSelector((state) => state.usuarios[nombre]?.bio) ?? "";
+        const dispatch = useDispatch();
+        const [bio, setBio] = useState(initialBio);
+
+        const guardarBio = () => {
+          dispatch({
+            type: "datos/bioCambiada",
+            payload: {
+              usuario: nombre,
+              bio,
+            },
+          });
+        };
+
+        return React.createElement(
+          "div",
+          null,
+          React.createElement(
+            "p",
+            null,
+            `Has iniciado sesión ${veces === 1 ? "1 vez" : `${veces} veces`}.`
+          ),
+          React.createElement("textarea", {
+            value: bio,
+            onChange: (e) => setBio(e.target.value),
+            placeholder: "Biografía",
+          }),
+          React.createElement(
+            "p",
+            null,
+            React.createElement("button", { onClick: guardarBio }, "Guardar biografía"),
+            React.createElement("button", { onClick: onCierreSesion }, "Cerrar sesión")
+          )
+        );
+      };
+
+      const PanelUsuario = () => {
+        const nombre = useSelector((state) => state.usuarioActual);
+        const dispatch = useDispatch();
+
+        const iniciarSesion = (usuario) =>
+          dispatch({ type: "panel/sesionIniciada", payload: { usuario } });
+
+        return React.createElement(
+          "div",
+          { className: "panel" },
+          React.createElement(
+            "h1",
+            null,
+            nombre === null ? "Inicia sesión" : `¡Hola de nuevo, ${nombre}!`
+          ),
+          nombre === null
+            ? React.createElement(FormLogin, { onInicioSesion: iniciarSesion })
+            : React.createElement(DatosUsuario, {
+                nombre: nombre,
+                onCierreSesion: () =>
+                  dispatch({ type: "panel/sesionCerrada" }),
+              })
+        );
+      };
+
+      const App = () =>
+        React.createElement(
+          Provider,
+          { store: store },
+          React.createElement(PanelUsuario, null)
+        );
+
+      ReactDOM.render(
+        React.createElement(App, null),
+        document.getElementById("root")
+      );
+    </script>
+  </body>
+</html>
