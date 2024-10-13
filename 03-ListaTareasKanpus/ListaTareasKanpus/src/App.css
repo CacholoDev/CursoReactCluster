@@ -73,37 +73,30 @@ li.done>label {
  
 }
 
-.form-fieldset {
-  border: none;
-  padding: 0;
-}
-
-.form-legend {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #0763cc;
-}
-
 .form-description {
   font-size: 0.9em;
   color: #666;
   margin-bottom: 20px;
 }
 
-.form-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+form fieldset {
+  background-color: #aaaaaa20;
+  color-scheme: light;
 }
-
-.form-input {
+form legend {
+  font-weight: bold;
+  margin: 0 auto;
+}
+form label {
+  display: block;
+  font-size: 95%;
+  margin-top: 1rem;
+}
+form input, form textarea {
+  border-style: solid;
+  padding: .5rem;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 5px; /* Reducir el margen inferior */
-  border: 1px solid #ccc;
-  border-radius: 3px;
   box-sizing: border-box;
-  background-color: #504d4f;
 }
 
 .form-input:focus {
@@ -140,4 +133,10 @@ li.done>label {
   border: 1px solid #e0e0e0;
   border-radius: 1rem;
   text-align: center;
+}
+
+/* desplegable Crear Cuenta */
+
+.desple {
+  margin-top: 1rem;
 }

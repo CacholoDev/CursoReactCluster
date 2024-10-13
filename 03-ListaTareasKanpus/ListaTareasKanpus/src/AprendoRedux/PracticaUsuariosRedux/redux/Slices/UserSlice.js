@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  usuarioActual: null,
+  userActual: null,
   usuarios: {},
 };
 
@@ -20,7 +20,7 @@ export const UserSlice = createSlice({
       };
     },
     cerrarSesion: (state) => {
-      state.usuarioActual = null;
+      state.userActual = null;
     },
     guardarBio: (state, action) => {
       const { usuario, bio } = action.payload;
@@ -28,3 +28,5 @@ export const UserSlice = createSlice({
     },
   },
 });
+
+export const { iniciarSesion, cerrarSesion, guardarBio } = UserSlice.actions;

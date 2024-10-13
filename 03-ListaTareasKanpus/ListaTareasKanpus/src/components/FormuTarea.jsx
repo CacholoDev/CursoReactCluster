@@ -1,29 +1,36 @@
-import { useState } from "react";
-import PropTypes from 'prop-types';
+import { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
+import { creada } from "../ReduxToolKit/Slices/tareaSlice";
+import { ThemeContext } from "./ThemeContext"; // Asegúrate de importar el contexto
 
-export const FormuTarea = ({tareas,setTareas}) => {
-    
-    const [nuevoTitulo,setTitulo] = useState('')
+export const FormuTarea = () => {
+  // Estado local para almacenar el título de la nueva tarea
+  const [nuevoTitulo, setTitulo] = useState('');
+  // Hook de Redux para despachar acciones
+  const dispatch = useDispatch();
+
+  const { isDark } = useContext(ThemeContext); // Obtén isDark del contexto
 
 
-     const addTarea = (event) => {
-        event.preventDefault();
-        const nuevaTarea = { titulo: nuevoTitulo, isChecked: false };
-        setTareas([...tareas, nuevaTarea]);
-        setTitulo('');
-        console.log(`añadiendo tarea ${nuevoTitulo}`);
-    }
-    return (
+  // Función que se llama cuando se envía el formulario
+  const addTarea = (event) => {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+    dispatch(creada(nuevoTitulo)); // Despachar la acción para crear una nueva tarea
+    setTitulo(''); // Limpiar el campo de entrada
+    console.log(`añadiendo tarea ${nuevoTitulo}`); // Log para depuración
+  }
+
+  return (
     <form onSubmit={addTarea}>
-        <input type="text" 
-        placeholder="Añadir tarea" 
+      {/* Campo de entrada para el título de la nueva tarea */}
+      <input 
+        type="text" 
+        className={isDark ? 'dark' : 'light'}
         value={nuevoTitulo} 
-        onChange={(e) => setTitulo(e.target.value)} />
-        <button type="submit">Añadir</button>
+        onChange={(e) => setTitulo(e.target.value)} 
+        placeholder="Nueva tarea" 
+      />
+      <button type="submit">Añadir</button>
     </form>
-    )
+  );
 }
-FormuTarea.propTypes = {
-    tareas: PropTypes.array.isRequired,
-    setTareas: PropTypes.func.isRequired,
-};
