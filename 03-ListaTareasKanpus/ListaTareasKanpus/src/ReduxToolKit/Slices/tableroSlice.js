@@ -1,6 +1,5 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
-import { creada } from "./tareaSlice";
-import { eliminada } from "./tareaSlice";
+import { creada, deleteTarea } from "./tareaSlice";
 const initialState = {
     todo: {
         nombre: "TODO",
@@ -48,7 +47,7 @@ const tableroSlice = createSlice({
                 state[action.payload.listaId].lista.push(action.payload.id)
                 }),
                 
-                builder.addCase(eliminada, (state, action) => {
+                builder.addCase(deleteTarea, (state, action) => {
                     for (let t in state) {
                       const index = state[t].lista.indexOf(action.payload)
                       if (index > -1) {

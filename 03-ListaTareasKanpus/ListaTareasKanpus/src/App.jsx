@@ -9,6 +9,7 @@ import { FormuSignUp } from "./components/FormuSignUp";
 import { BotonToggle } from "./components/BotonToggle";
 import { Provider } from "react-redux";
 import { store } from "./ReduxToolKit/store";
+import Tablero from "./components/Tablero";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function EnvolvedApp() {
         {/* <PanelRedux /> */}
       </div>
       <h1>Kanpus</h1>
+      <Tablero />
       {/* Botón para cambiar el tema */}
       <BotonToggle mensaje={mensaje} onClick={toggleTheme} />
       {/* Pasamos la lista de tareas a Heady */}
